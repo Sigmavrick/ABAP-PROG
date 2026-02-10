@@ -1,0 +1,1 @@
+This repository contains ABAP mini projects including a calculator, employee management system, grocery bill generator, and student mark list generator. These programs showcase hands-on experience with SAP ABAP fundamentals, data processing, and report generation.
