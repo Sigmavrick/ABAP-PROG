@@ -1,0 +1,157 @@
+REPORT zstudent_marksheet_multi.
+
+TYPES: BEGIN OF ty_student,
+         name     TYPE c LENGTH 30,
+         roll     TYPE i,
+         sub1     TYPE i,
+         sub2     TYPE i,
+         sub3     TYPE i,
+         sub4     TYPE i,
+         sub5     TYPE i,
+         total    TYPE i,
+         average  TYPE i,
+         grade    TYPE c LENGTH 2,
+         status   TYPE c LENGTH 10,
+       END OF ty_student.
+
+
+
+DATA: wa_student TYPE ty_student,
+      it_students TYPE STANDARD TABLE OF ty_student.
+
+
+DO 7 TIMES.
+    CLEAR wa_student.
+
+
+    CASE sy-index.
+      WHEN 1.
+      wa_student-name = 'Maverick'.
+      wa_student-roll = 101.
+      wa_student-sub1 = 88.
+      wa_student-sub2 = 92.
+      wa_student-sub3 = 85.
+      wa_student-sub4 = 88.
+      wa_student-sub5 = 96.
+      WHEN 2.
+      wa_student-name = 'White'.
+      wa_student-roll = 102.
+      wa_student-sub1 = 45.
+      wa_student-sub2 = 55.
+      wa_student-sub3 = 61.
+      wa_student-sub4 = 44.
+      wa_student-sub5 = 59.
+      WHEN 3.
+      wa_student-name = 'Natasha'.
+      wa_student-roll = 103.
+      wa_student-sub1 = 76.
+      wa_student-sub2 = 82.
+      wa_student-sub3 = 90.
+      wa_student-sub4 = 77.
+      wa_student-sub5 = 79.
+      WHEN 4.
+      wa_student-name = 'Krish'.
+      wa_student-roll = 104.
+      wa_student-sub1 = 53.
+      wa_student-sub2 = 75.
+      wa_student-sub3 = 88.
+      wa_student-sub4 = 55.
+      wa_student-sub5 = 100.
+      WHEN 5.
+      wa_student-name  = 'Tanish'.
+      wa_student-roll  = 105.
+      wa_student-sub1  = 78.
+      wa_student-sub2  = 64.
+      wa_student-sub3  = 92.
+      wa_student-sub4  = 81.
+      wa_student-sub5  = 89.
+      WHEN 6.
+      wa_student-name  = 'Saanvi'.
+      wa_student-roll  = 106.
+      wa_student-sub1  = 91.
+      wa_student-sub2  = 87.
+      wa_student-sub3  = 76.
+      wa_student-sub4  = 84.
+      wa_student-sub5  = 90.
+      WHEN 7.
+      wa_student-name  = 'Aarav'.
+      wa_student-roll  = 107.
+      wa_student-sub1  = 65.
+      wa_student-sub2  = 72.
+      wa_student-sub3  = 55.
+      wa_student-sub4  = 30.
+      wa_student-sub5  = 74.
+    ENDCASE.
+
+
+    wa_student-total = wa_student-sub1 + wa_student-sub2 + wa_student-sub3 + wa_student-sub4 + wa_student-sub5.
+    wa_student-average = wa_student-total / 5.
+
+
+    IF wa_student-sub1 < 35 OR wa_student-sub2 < 35 OR wa_student-sub3 < 35 OR wa_student-sub4 < 35 OR wa_student-sub5 < 35.
+       wa_student-status = 'FAIL'.
+       wa_student-grade = 'F'.
+    ELSE.
+    wa_student-status = 'PASS'.
+    IF wa_student-average >= 90.
+      wa_student-grade = 'A+'.
+    ELSEIF wa_student-average >= 75.
+      wa_student-grade = 'A'.
+    ELSEIF wa_student-average >= 60.
+      wa_student-grade = 'B'.
+    ELSEIF wa_student-average >= 50.
+      wa_student-grade = 'C'.
+    ELSE.
+      wa_student-grade = 'D'.
+    ENDIF.
+  ENDIF.
+
+
+  APPEND wa_student TO it_students.
+ENDDO.
+
+
+WRITE: / '||||STUDENT MARKSHEET SUMMARY||||'. FORMAT COLOR 2.
+ULINE.
+WRITE: / 'Name', 25 'Roll No', 35 'Total', 45 'Average', 60 'Grade', 70 'Status'.
+ULINE.
+
+
+
+LOOP AT it_students INTO wa_student.
+
+     CASE wa_student-grade.
+      WHEN 'A+' OR 'A'.
+        FORMAT COLOR 5. " Green
+      WHEN 'B' .
+        FORMAT COLOR 7. " Yellow
+      WHEN 'C' .
+        FORMAT COLOR 7. " Yellow
+      WHEN OTHERS.
+        FORMAT COLOR 6. " Red
+  ENDCASE.
+
+
+     WRITE: / wa_student-name,
+         20 wa_student-roll,
+         30 wa_student-total,
+         40 wa_student-average,
+         60 wa_student-grade,
+         70 wa_student-status.
+ENDLOOP.
+
+
+
+
+    
+
+
+
+
+
+
+
+    
+
+ 
+
