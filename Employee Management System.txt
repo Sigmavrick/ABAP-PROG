@@ -1,0 +1,96 @@
+REPORT  ZSRP_EMPDATA.
+
+TYPES: BEGIN OF ty_employee,
+          emp_id TYPE i,
+          name   TYPE c LENGTH 20,
+          dept   TYPE c LENGTH 20,
+          salary TYPE p DECIMALS 2,
+       END OF ty_employee.
+
+
+DATA: it_employee TYPE STANDARD TABLE of ty_employee,
+      wa_employee TYPE ty_employee.
+
+
+INITIALIZATION.
+     wa_employee-emp_id = 100.
+     wa_employee-name   = 'Ram'.
+     wa_employee-dept   = 'HR'.
+     wa_employee-salary = '42500.10'.
+     APPEND wa_employee TO it_employee.
+      
+     wa_employee-emp_id = 101.
+     wa_employee-name   = 'Sam'.
+     wa_employee-dept   = 'IT'.
+     wa_employee-salary = '35000.00'.
+     APPEND wa_employee TO it_employee.
+
+     wa_employee-emp_id = 102.
+     wa_employee-name   = 'Bruce'.
+     wa_employee-dept   = 'Finance'.
+     wa_employee-salary = '30000.00'.
+     APPEND wa_employee TO it_employee.
+
+
+PARAMETERS: p_action TYPE c LENGTH 1 OBLIGATORY,
+            p_emp_id TYPE i,
+            p_name   TYPE c LENGTH 20,
+            p_dept   TYPE c LENGTH 20,
+            p_salary TYPE p DECIMALS 2.
+
+
+* A - Add
+* V - View All
+* S - Search by EmpID
+* D - Delete by EmpID
+
+
+START-OF-SELECTION.
+
+     CASE p_action.
+        
+          WHEN 'A'.  "Add Employee
+            wa_employee-emp_id = p_emp_id.
+            wa_employee-name   = p_name.
+            wa_employee-dept   = p_dept.
+            wa_employee-salary = p_salary.
+            APPEND wa_employee TO it_employee.
+            WRITE: / 'Employee added successfully.'.
+
+          WHEN 'V'.   "View Employee
+            IF it_employee IS INITIAL.
+            WRITE: / 'No employee records found.'.
+            ELSE.
+            WRITE: / '--- Employee List ---'.
+            LOOP AT it_employee INTO wa_employee.
+            WRITE: / 'ID:', wa_employee-emp_id,
+                     'Name:', wa_employee-name,
+                     'Dept:', wa_employee-dept,
+                     'Salary:', wa_employee-salary.
+            ENDLOOP.
+            ENDIF.
+       
+          WHEN 'S'.  "Search by Employee ID
+            READ TABLE it_employee INTO wa_employee WITH KEY emp_id = p_emp_id.
+            IF sy-subrc = 0.
+            WRITE: / '--- Employee Found ---',
+               / 'ID:', wa_employee-emp_id,
+               / 'Name:', wa_employee-name,
+               / 'Dept:', wa_employee-dept,
+               / 'Salary:', wa_employee-salary.
+            ELSE.
+            WRITE: / 'Employee not found.'.
+            ENDIF.
+
+          WHEN 'D'.  "Delete by Employee ID
+            DELETE it_employee WHERE emp_id = p_emp_id.
+            IF sy-subrc = 0.
+            WRITE: / 'Employee deleted successfully.'.
+            ELSE.
+            WRITE: / 'Employee not found.'.
+            ENDIF.
+
+    WHEN OTHERS.
+      WRITE: / 'Invalid action. Use A (Add), V (View), S (Search), or D (Delete).'.
+
+   ENDCASE.

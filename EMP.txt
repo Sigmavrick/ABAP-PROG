@@ -1,0 +1,7 @@
+PARAMETERS : Emp_name TYPE C LENGTH 25,
+             Emp_id TYPE I,
+             Emp_sal TYPE I LENGTH 10.
+
+
+DATA result f.
+

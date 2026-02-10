@@ -1,0 +1,60 @@
+REPORT  zsrp_grocerybillingsystem.
+
+TYPES : BEGIN OF ty_item,
+        item_name TYPE c LENGTH 30,
+        quantity TYPE i,
+        price_per_unit TYPE p DECIMALS 2,
+        total_price TYPE p DECIMALS 2,
+        END OF ty_item.
+
+
+DATA: wa_item TYPE ty_item,
+      it_items TYPE STANDARD TABLE OF ty_item,
+      lv_total TYPE p DECIMALS 2.
+
+
+PARAMETERS : p_name1 TYPE c LENGTH 30,
+             p_qty1 TYPE i,
+             p_price1 TYPE p DECIMALS 2,
+             p_name2 TYPE c LENGTH 30,
+             p_qty2 TYPE i,
+             p_price2 TYPE p DECIMALS 2,
+             p_name3 TYPE c LENGTH 30,
+             p_qty3 TYPE i,
+             p_price3 TYPE p DECIMALS 2.
+
+START-OF-SELECTION.
+
+  wa_item-item_name = p_name1.
+  wa_item-quantity = p_qty1.
+  wa_item-price_per_unit = p_price1.
+  wa_item-total_price = p_qty1 * p_price1.
+  APPEND wa_item TO it_items.
+
+  wa_item-item_name = p_name2.
+  wa_item-quantity = p_qty2.
+  wa_item-price_per_unit = p_price2.
+  wa_item-total_price = p_qty2 * p_price2.
+  APPEND wa_item TO it_items.
+
+  wa_item-item_name = p_name3.
+  wa_item-quantity = p_qty3.
+  wa_item-price_per_unit = p_price3.
+  wa_item-total_price = p_qty3 * p_price3.
+  APPEND wa_item TO it_items.
+
+  ULINE.
+  WRITE: / '----Grocery Bill----'.
+  ULINE.
+  WRITE: / 'Item', 25 'Quantity', 50 'Price', 65 'Total'.
+  ULINE.
+
+
+  LOOP AT it_items INTO wa_item.
+    WRITE: / wa_item-item_name, 20 wa_item-quantity, 40 wa_item-price_per_unit, 55 wa_item-total_price.
+    lv_total = lv_total + wa_item-total_price.
+  ENDLOOP.
+
+  WRITE: / sy-uline.
+  WRITE: / 'Grand Total:', 55 lv_total.
+  ULINE.

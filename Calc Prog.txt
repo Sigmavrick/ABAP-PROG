@@ -1,0 +1,36 @@
+PARAMETERS : p_num1 TYPE i,
+             p_num2 TYPE i,
+             p_ops TYPE C LENGHT 1.
+
+
+DATA result f.
+
+IF p_ops = 'A' .
+   result = p_num1 + p_num2.
+   WRITE: 'Addition result:', result.
+
+
+ELSEIF p_ops = 'S' .
+   result = p_num1 - p_num2.
+   WRITE: 'Subraction result:', result.
+
+
+ELSEIF p_ops = 'M' .
+   result = p_num1 * p_num2.
+   WRITE: 'Multiplication result:', result.
+
+
+ELSEIF p_ops = 'D' .
+   IF p_num2 = 0.
+    WRITE: 'Error: Division by zero not allowed.'.
+  ELSE.
+    result = p_num1 / p_num2.
+    WRITE: 'Division result:', result.
+  ENDIF.
+
+ELSE.
+   WRITE: 'Invalid Operation !!! Please Use A, S, M, D.'.
+ENDIF.
+   
+
+
